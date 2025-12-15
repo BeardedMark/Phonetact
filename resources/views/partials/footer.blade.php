@@ -2,11 +2,13 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="flex-col flex-center font-center pad-y-md">
-                    <p class="font-size-md font-color-second font-center">Phonetact © 2025</p>
+                <div class="flex-col flex-start flex-center pad-y-md">
+                    <a class="font-size-sm font-color-second font-color-accent-hover speed-norm"
+                        href="{{ route('pages.sitemap') }}">Карта сайта</a>
+                    <a class="font-size-sm font-color-second font-color-accent-hover speed-norm"
+                        href="{{ route('pages.privacy') }}">Конфидициальность</a>
                     <a href="https://sin-mark.ru/"
-                        class="font-size-sm font-color-second font-center font-color-accent-hover speed-norm">Create
-                        by Sin-Mark</a>
+                        class="font-size-sm font-color-second font-color-accent-hover speed-norm">Phonetact © 2025</a>
                 </div>
             </div>
         </div>

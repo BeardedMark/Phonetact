@@ -23,33 +23,32 @@
                 </p>
 
                 <div class="flex-row-sm flex-center">
-                    <a data-tooltip="WhatsApp" class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm"
-                        target="_blink" href="https://wa.me/{{ $phone }}">
+                    <a data-tooltip="WhatsApp" target="_blink" href="https://wa.me/{{ $phone }}"
+                        class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm">
                         <img class="lock" height="42px"
                             src="https://img.icons8.com/material-outlined/96/whatsapp--v1.png" alt="">
                     </a>
 
-                    <a data-tooltip="Telegram" class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm"
-                        target="_blink" href="https://t.me/{{ $phone }}">
+                    <a data-tooltip="Telegram" target="_blink" href="https://t.me/{{ $phone }}"
+                        class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm">
                         <img class="lock" height="42px" src="https://img.icons8.com/material-rounded/48/telegram-app.png"
                             alt="">
                     </a>
-        
-                    <a data-tooltip="Viber"
-                        class="transform-scale-hover speed-norm"
-                        target="_blink" href="viber://chat?number={{ $phone }}">
+
+                    <a data-tooltip="Viber" href="viber://chat?number={{ $phone }}" target="_blink"
+                        class="transform-scale-hover speed-norm">
                         <img class="lock" height="42px" src="https://img.icons8.com/material-outlined/48/viber.png"
                             alt="">
                     </a>
 
-                    <a data-tooltip="Сообщение" class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm"
-                        href="sms:{{ $phone }}">
+                    <a data-tooltip="Сообщение" href="sms:{{ $phone }}"
+                        class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm">
                         <img class="lock" height="42px"
                             src="https://img.icons8.com/material-outlined/96/filled-message.png" alt="">
                     </a>
 
-                    <a data-tooltip="Звонок" class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm"
-                        href="tel:{{ $phone }}">
+                    <a data-tooltip="Звонок" href="tel:{{ $phone }}"
+                        class="transform-scale-hover font-color-accent font-color-contrast-hover font-size-lg speed-norm">
                         <img class="lock" height="42px"
                             src="https://img.icons8.com/material-rounded/48/ringer-volume.png" alt="">
                     </a>
@@ -74,10 +73,23 @@
             @isset($organization)
                 <p class="font-size-md">{{ $organization }}</p>
             @endisset
+
+            @isset($email)
+                <a href="mailto:{{ $email }}" data-tooltip="Написать письмо"
+                    class="font-size-lg font-color-contrast font-color-accent-hover speed-norm">{{ $email }}</a>
+            @endisset
+
+            @isset($website)
+                <a href="https://{{ $website }}" target="_blink" data-tooltip="Посетить сайт"
+                    class="font-size-sm font-color-contrast font-color-accent-hover speed-norm">{{ $website }}</a>
+            @endisset
+            
+            @isset($address)
+                <p class="font-size-md">{{ $address }}</p>
+            @endisset
         </div>
 
-        <img class="back-color-prime bord-rad-md flex-center pad-md" src="{{ $qrcode }}"
-            alt="">
+        <img class="back-color-prime bord-rad-md flex-center pad-md" src="{{ $qrcode }}" alt="">
 
         {{-- @isset($phoneDaData)
             <div class="flex-col font-center">
@@ -105,7 +117,7 @@
 
     {{-- @component('pages.components.share', compact('title', 'phone'))
     @endcomponent --}}
-    
+
     <script>
         // Получаем кнопку
         const copyButton = document.getElementById('copyButton');

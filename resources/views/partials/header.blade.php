@@ -9,16 +9,16 @@
         </div>
 
         <div class="flex-row-lg flex-jc-around pad-md back-color-prime">
-            <a href="{{ route('phones.index') }}"
+            <a href="{{ route('pages.main') }}"
                 class="speed-norm font-color-accent font-color-accent-hover flex-row-sm flex-y-center">
                 <img src="{{ asset('img/phonetact2.png') }}" height="26px"> Phonetact
             </a>
 
-            <a id="phoneTelegram" class="transform-scale-hover speed-norm" href="{{ route('phones.create') }}">
+            <a class="transform-scale-hover speed-norm" href="{{ route('phones.create') }}">
                 <img class="lock" height="26px" src="https://img.icons8.com/material-outlined/96/new-contact.png">
             </a>
 
-            <a id="phoneTelegram" class="transform-scale-hover speed-norm" href="{{ route('phones.index') }}">
+            <a class="transform-scale-hover speed-norm" href="{{ route('phones.index') }}">
                 <img class="lock" height="26px" src="https://img.icons8.com/material-outlined/48/keypad.png">
             </a>
 

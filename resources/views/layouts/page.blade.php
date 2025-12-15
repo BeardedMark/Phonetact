@@ -18,11 +18,6 @@
                         <div class="col col-12 col-lg">
                             @yield('content')
                         </div>
-    
-                        {{-- <div class="col col-12 col-lg-3">
-                            @component('pages.components.sidebar')
-                            @endcomponent
-                        </div> --}}
                     </div>
                 </div>
             </section>

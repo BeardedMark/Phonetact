@@ -16,31 +16,53 @@ class PhoneController extends Controller
 {
     public function index(Request $request)
     {
-        $phoneTarget = $request['to'] ?: null;
-        return view('pages.phones.index', compact('phoneTarget'));
+        $phoneTarget = $request['to'] ?: 'по номеру телефона';
+        $title = "Написать {$phoneTarget} не добавляя в контакты";
+        $description = "Свяжитесь быстро и просто через мессенджеры или звонки, используя номер телефона {$phoneTarget} без необходимости добавлять в контакты";
+
+        return view('pages.phones.index', compact('title', 'description'));
     }
 
     public function create(Request $request)
     {
         $phone = $request['phone'] ? $this->formatPhoneNumber($request['phone']) : null;
-        return view('pages.phones.create', compact('phone'));
+
+        $phoneTarget = $request['to'] ?: 'по номеру телефона';
+        $title = "Создать QR код {$phoneTarget}";
+        $description = "Создайте уникальный QR-код для {$phoneTarget}, чтобы быстро и удобно поделиться с коллегами, клиентами или друзьями";
+
+        return view('pages.phones.create', compact('phone', 'title', 'description'));
     }
 
-    public function about()
-    {
-        return view('pages.phones.about');
-    }
-
-    public function privacy()
-    {
-        return view('pages.phones.privacy');
-    }
 
     public function show(Request $request)
     {
-        // $url = 'https://cleaner.dadata.ru/api/v1/clean/phone';
-        // $token = '0dadf8898e7067fe3be74dcea5511e9db40a2f4';
-        // $secret = '73843a4515d3526b61f3b9396ec61262cdb34e20';
+        $phone = $request['tel'] ? $this->formatPhoneNumber($request['tel']) : null;
+        $header = $request['ttl'];
+        $comment = $request['nt'];
+        $name = $request['fn'];
+        $lastname = $request['ln'];
+        $organization = $request['org'];
+        $email = $request['eml'];
+        $website = $request['url'];
+        $street = $request['st'];
+        $city = $request['ct'];
+        $region = $request['rg'];
+        $country = $request['co'];
+
+        $addressParts = array_filter([$street, $city, $region, $country], function ($value) {
+            return !empty($value);
+        });
+
+        $address = implode(', ', $addressParts);
+
+        $qrcode = $this->qrcode($request);
+
+        $url = 'https://cleaner.dadata.ru/api/v1/clean/phone';
+        $token = '0dadf8898e7067fe3be74dcea5511e9db40a2f4';
+        $secret = '73843a4515d3526b61f3b9396ec61262cdb34e20';
+        // $token = '7dc4971ddd2940130c25be7ab68b133eca10df9c';
+        // $secret = 'be30aa9aa34e131a6eddecec81cb55d4893c8679';
 
         // $data = [$phone];
 
@@ -67,15 +89,6 @@ class PhoneController extends Controller
         //         echo "Серверная ошибка (5xx)\n";
         //     }
         // }
-
-        $phone = $request['phone'] ? $this->formatPhoneNumber($request['phone']) : null;
-        $header = $request['header'];
-        $comment = $request['comment'];
-        $name = $request['name'];
-        $lastname = $request['lastname'];
-        $organization = $request['organization'];
-
-        $qrcode = $this->qrcode($request);
 
         // Формирование Title
         $titleParts = [];
@@ -146,7 +159,7 @@ class PhoneController extends Controller
         $description = implode(' ', $descriptionParts);
 
 
-        return view('pages.phones.show', compact('title', 'description', 'header', 'comment', 'phone', 'name', 'lastname', 'organization', 'qrcode'));
+        return view('pages.phones.show', compact('title', 'description', 'header', 'comment', 'phone', 'name', 'lastname', 'organization', 'email', 'website', 'address', 'qrcode'));
     }
 
     public function qrcode(Request $request)
@@ -154,33 +167,32 @@ class PhoneController extends Controller
         $vCardData = "BEGIN:VCARD\nVERSION:3.0\n";
 
         // Основные данные
-        $vCardData .= $request->has('lastname') || $request->has('name')
-            ? "N:{$request->input('lastname', '')};{$request->input('name', '')}\n"
+        $vCardData .= $request->has('ln') || $request->has('fn')
+            ? "N:{$request->input('ln', '')};{$request->input('fn', '')}\n"
             : "";
-        $vCardData .= $request->has('name') || $request->has('lastname')
-            ? "FN:{$request->input('name', '')} {$request->input('lastname', '')}\n"
+        $vCardData .= $request->has('fn') || $request->has('ln')
+            ? "FN:{$request->input('fn', '')} {$request->input('ln', '')}\n"
             : "";
 
         // Организация и должность
-        $vCardData .= $request->has('organization') ? "ORG:{$request->organization}\n" : "";
-        $vCardData .= $request->has('header') ? "TITLE:{$request->header}\n" : "";
+        $vCardData .= $request->has('org') ? "ORG:{$request->org}\n" : "";
+        $vCardData .= $request->has('ttl') ? "TITLE:{$request->ttl}\n" : "";
 
         // Контакты
         $vCardData .= $request->has('work_phone') ? "TEL;WORK;VOICE:{$request->work_phone}\n" : "";
         $vCardData .= $request->has('home_phone') ? "TEL;HOME;VOICE:{$request->home_phone}\n" : "";
-        $vCardData .= $request->has('phone') ? "TEL;CELL:{$request->phone}\n" : "";
+        $vCardData .= $request->has('tel') ? "TEL;CELL:{$request->tel}\n" : "";
         $vCardData .= $request->has('fax') ? "TEL;FAX:{$request->fax}\n" : "";
-        $vCardData .= $request->has('email') ? "EMAIL:{$request->email}\n" : "";
-        $vCardData .= $request->has('website') ? "URL:{$request->website}\n" : "";
+        $vCardData .= $request->has('eml') ? "EMAIL:{$request->eml}\n" : "";
+        $vCardData .= $request->has('url') ? "URL:{$request->url}\n" : "";
 
         // Адрес
-        if ($request->hasAny(['street', 'city', 'region', 'postal_code', 'country'])) {
-            $street = $request->input('street', '');
-            $city = $request->input('city', '');
-            $region = $request->input('region', '');
-            $postalCode = $request->input('postal_code', '');
-            $country = $request->input('country', '');
-            $vCardData .= "ADR;WORK:;;$street;$city;$region;$postalCode;$country\n";
+        if ($request->hasAny(['st', 'ct', 'rg', 'co'])) {
+            $street = $request->input('st', '');
+            $city = $request->input('ct', '');
+            $region = $request->input('rg', '');
+            $country = $request->input('co', '');
+            $vCardData .= "ADR;WORK:;;$street;$city;$region;$country\n";
         }
 
         // День рождения
@@ -190,7 +202,7 @@ class PhoneController extends Controller
         $vCardData .= $request->has('photo') ? "PHOTO;VALUE=URI:{$request->photo}\n" : "";
 
         // Примечание
-        $vCardData .= $request->has('comment') ? "NOTE:{$request->comment}\n" : "";
+        $vCardData .= $request->has('nt') ? "NOTE:{$request->nt}\n" : "";
 
         // Социальные сети (неофициальное расширение X-SOCIALPROFILE)
         // $vCardData .= $request->has('instagram') ? "X-SOCIALPROFILE;type=instagram:{$request->instagram}\n" : "";

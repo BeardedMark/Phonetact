@@ -32,31 +32,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: var(--color-accent);
-}
-
-h1 {
-    font-size: var(--font-xxl);
-}
-
-h2 {
-    font-size: var(--font-xlg);
-}
-
-h3 {
-    font-size: var(--font-lgr);
-}
-
-h4 {
-    font-size: var(--font-lg);
-}
-
-h5 {
     font-size: var(--font-md);
-}
-
-h6 {
-    font-size: var(--font-sm);
 }
 
 a{

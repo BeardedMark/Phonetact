@@ -4,7 +4,7 @@
     <div class="flex-row-md w-auto back-color-prime bord-rad-md pad-md frame-shadow flex-center speed-norm">
         <button type="button" id="pasteBtn" data-tooltip="Вставить">
             <img class="transform-scale-hover speed-norm" height="26px"
-                src="https://img.icons8.com/material-rounded/48/AEBBD0/paste.png" alt="paste">
+                src="https://img.icons8.com/material-outlined/48/AEBBD0/paste.png" alt="paste">
         </button>
 
         <button type="button" id="clearBtn" data-tooltip="Очистить" class="d-none">
@@ -13,16 +13,16 @@
         </button>
 
         <input id="phoneInput" name="phone" type="tel" class="back-color-primes font-size-lgr font-center font-color-accent"
-            placeholder="+7 (___) ___-__-__" required autofocus >
+            placeholder="+7 (___) ___-__-__" maxlength="18" required autofocus>
 
         <button type="button" id="infoBtn" data-tooltip="Номер из 10 цифр" class="cursor-help">
             <img class="transform-scale-hover speed-norm" height="26px"
-                src="https://img.icons8.com/material-rounded/48/AEBBD0/info.png" alt="info">
+                src="https://img.icons8.com/material-outlined/48/AEBBD0/info.png" alt="info">
         </button>
 
         <button type="button" id="copyBtn" data-tooltip="Копировать" class="d-none">
             <img class="transform-scale-hover speed-norm" height="26px"
-                src="https://img.icons8.com/material-rounded/48/AEBBD0/copy.png" alt="copy">
+                src="https://img.icons8.com/material-outlined/48/AEBBD0/copy.png" alt="copy">
         </button>
     </div>
 
@@ -271,4 +271,21 @@
             createPhoneCard.classList.add('lock-opacity');
         }
     }
+    
+    function updateLinks() {
+    const phone = phoneInput.value.replace(/\D/g, ''); // Удаляем всё, кроме цифр
+    if (phone.length === 11) { // Проверка на корректность длины номера
+        phoneWhatsapp.href = `https://wa.me/${phone}`;
+        phoneTelegram.href = `https://t.me/${phone}`;
+        phoneViber.href = `viber://chat?number=${phone}`;
+        phoneMessage.href = `sms:${phone}`;
+        phoneCall.href = `tel:${phone}`;
+    } else {
+        phoneWhatsapp.href = `https://wa.me/`;
+        phoneTelegram.href = `https://t.me/`;
+        phoneViber.href = `viber://chat?number=`;
+        phoneMessage.href = `sms:`;
+        phoneCall.href = `tel:`;
+    }
+}
 </script>
